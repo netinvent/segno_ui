@@ -5,7 +5,9 @@
 __intname__ = "segno_ui"
 __author__ = "Orsiris de Jong"
 __copyright__ = "Copyright (C) 2022 Orsiris de Jong - NetInvent SASU"
-__description__ = "Basic UI for segno QR Code generator allowing to use segno fully offline"
+__description__ = (
+    "Basic UI for segno QR Code generator allowing to use segno fully offline"
+)
 __licence__ = "BSD 3 Clause"
 __version__ = "1.0"
 __build__ = "2022113001"
@@ -17,6 +19,7 @@ import segno
 import segno.helpers
 import inspect
 import json
+
 
 _DEBUG = False
 
@@ -70,7 +73,7 @@ def get_conf_from_gui(values):
     }
 
     # Add data_dark and data_light if export is SVG or PNG since EPS and PDF don't support them
-    if values['-EXPORT_FORMAT-'] in ['svg', 'png']:
+    if values["-EXPORT_FORMAT-"] in ["svg", "png"]:
         segno_export_opts["data_dark"] = data_dark
         segno_export_opts["data_light"] = data_light
 
@@ -237,7 +240,10 @@ def gui():
         ],
         [
             sg.ColorChooserButton(
-                "Data light", target="-DATA_LIGHT-", key="-CHOOSER BUTTON-", size=(15, 1)
+                "Data light",
+                target="-DATA_LIGHT-",
+                key="-CHOOSER BUTTON-",
+                size=(15, 1),
             ),
             sg.Input("#FFFFFF", key="-DATA_LIGHT-", size=(20, 1), enable_events=True),
         ],
@@ -247,12 +253,28 @@ def gui():
             sg.Combo(
                 ["png", "svg", "eps", "pdf"], default_value="png", key="-EXPORT_FORMAT-"
             ),
-            sg.SaveAs("Export as", target='-EXPORT_FILENAME-'), sg.Input('', key='-EXPORT_FILENAME-', enable_events=True, visible=False)
+            sg.SaveAs("Export as", target="-EXPORT_FILENAME-"),
+            sg.Input("", key="-EXPORT_FILENAME-", enable_events=True, visible=False),
         ],
-        [sg.SaveAs("Export settings", target='-EXPORT_SETTINGS_FILENAME-'), sg.Input('', key='-EXPORT_SETTINGS_FILENAME-', enable_events=True, visible=False),
-         sg.FileBrowse("Import settings", target='-IMPORT_SETTINGS_FILENAME-'), sg.Input('', key='-IMPORT_SETTINGS_FILENAME-', enable_events=True, visible=False), sg.Button("Exit")],
-        [sg.Text("Resulting Image", text_color='grey', font=(None, 12, 'bold'))],
-        [sg.Column([[sg.Image(key="-OUTPUT-IMAGE-", size=(100, 100))]], background_color="#AAAAAA", element_justification='c')],
+        [
+            sg.SaveAs("Export settings", target="-EXPORT_SETTINGS_FILENAME-"),
+            sg.Input(
+                "", key="-EXPORT_SETTINGS_FILENAME-", enable_events=True, visible=False
+            ),
+            sg.FileBrowse("Import settings", target="-IMPORT_SETTINGS_FILENAME-"),
+            sg.Input(
+                "", key="-IMPORT_SETTINGS_FILENAME-", enable_events=True, visible=False
+            ),
+            sg.Button("Exit"),
+        ],
+        [sg.Text("Resulting Image", text_color="grey", font=(None, 12, "bold"))],
+        [
+            sg.Column(
+                [[sg.Image(key="-OUTPUT-IMAGE-", size=(100, 100))]],
+                background_color="#AAAAAA",
+                element_justification="c",
+            )
+        ],
     ]
 
     dynamic_layouts = []
@@ -283,7 +305,9 @@ def gui():
                 [[sg.TabGroup([dynamic_layouts], key="-ACTIVE_TAB-")]],
                 vertical_alignment="top",
             ),
-            sg.Column(settings_col, vertical_alignment="top", element_justification='c'),
+            sg.Column(
+                settings_col, vertical_alignment="top", element_justification="c"
+            ),
         ],
     ]
 
@@ -309,9 +333,9 @@ def gui():
                     raise
         elif event == "-EXPORT_SETTINGS_FILENAME-":
             try:
-                config_filename = values['-EXPORT_SETTINGS_FILENAME-']
-                if config_filename.split('.')[0] != 'json':
-                    config_filename = config_filename.split('.')[0] + '.json'
+                config_filename = values["-EXPORT_SETTINGS_FILENAME-"]
+                if config_filename.split(".")[0] != "json":
+                    config_filename = config_filename.split(".")[0] + ".json"
                 config = {}
                 config["software"] = {
                     "name": __intname__,
@@ -336,14 +360,20 @@ def gui():
                     raise
         elif event == "-IMPORT_SETTINGS_FILENAME-":
             try:
-                with open(values['-IMPORT_SETTINGS_FILENAME-'], "r", encoding="utf-8") as file_handle:
+                with open(
+                    values["-IMPORT_SETTINGS_FILENAME-"], "r", encoding="utf-8"
+                ) as file_handle:
                     config = json.load(file_handle)
                     fill_gui_from_segno_arguments(config, window)
                     # Reload values so we may generate the qrcode
                     _, values = window.read(timeout=1)
                     autogen(window, values)
             except Exception as exc:
-                sg.PopupError("Could not import config file {}: {}".format(values['-IMPORT_FILENAME-'], exc))
+                sg.PopupError(
+                    "Could not import config file {}: {}".format(
+                        values["-IMPORT_FILENAME-"], exc
+                    )
+                )
                 if _DEBUG:
                     raise
         else:
