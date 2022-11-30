@@ -153,3 +153,8 @@ cython_debug/
 
 # Configs
 */*-settings.json
+
+# Nuitka builds
+*.build
+*.dist
+*.onefile-build
