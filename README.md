@@ -23,9 +23,18 @@ Use with:
 segno_ui.py
 ```
 
+Depending on your system, you might need to install tkinter. Install with
+| System                                 | command                                  |
+|----------------------------------------|------------------------------------------|
+| RHEL 8+, Fedora and clones             | `dnf install python3-tkinter`            |
+| RHEL and earlier Fedora and clones     | `yum install tkinter`                    |
+| Debian, Ubuntu, Mint based             | `sudo apt-get install python-tk`         |
+| Arch based                             | `sudo pacman -S tk`                      |
+| Windows                                | Select 'tk' when installing Python       |
+
 ## Graphical user interface
 
-![image](pics/screenshot_202211300101.png)
+![image](pics/screenshot_20221130101.png)
 
 
 ## Technical stuff

@@ -9,12 +9,21 @@ __description__ = (
     "Basic UI for segno QR Code generator allowing to use segno fully offline"
 )
 __licence__ = "BSD 3 Clause"
-__version__ = "1.0"
+__version__ = "1.0.2"
 __build__ = "2022113001"
 __url__ = "https://github.com/netinvent/segno_ui"
 
 
-import PySimpleGUI as sg
+import sys
+
+try:
+    import PySimpleGUI as sg
+except ImportError as exc:
+    print(
+        "Module not found. If tkinter is missing, you need to install it from your distribution. See README.md file"
+    )
+    print("Error: {}".format(exc))
+    sys.exit()
 import segno
 import segno.helpers
 import inspect
