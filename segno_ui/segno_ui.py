@@ -8,7 +8,7 @@ __copyright__ = "Copyright (C) 2022 Orsiris de Jong - NetInvent SASU"
 __description__ = "Basic UI for segno QR Code generator allowing to use segno fully offline"
 __licence__ = "BSD 3 Clause"
 __version__ = "1.0"
-__build__ = "2022112901"
+__build__ = "2022113001"
 __url__ = "https://github.com/netinvent/segno_ui"
 
 
@@ -18,7 +18,7 @@ import segno.helpers
 import inspect
 import json
 
-_DEBUG = True
+_DEBUG = False
 
 # QRCode types and their respective make function in segno
 QRCODE_TYPES = {
