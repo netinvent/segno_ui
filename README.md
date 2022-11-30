@@ -34,7 +34,7 @@ Depending on your system, you might need to install tkinter. Install with
 
 ## Graphical user interface
 
-![image](pics/screenshot_20221130101.png)
+![image](pics/screenshot_202211300101.png)
 
 
 ## Technical stuff
