@@ -9,7 +9,7 @@ Using online generators needs you to put your trust in developper behind the too
 
 ## Quick usage
 
-You may find precompiled binaries for Windows on the [release page](https://github.com/netinvent/segno_ui/releases).
+You may find **precompiled binaries for Windows** on the [release page](https://github.com/netinvent/segno_ui/releases).
 
 We don't provide precompiled binaries for Linux or MacOS, as those generally come with a Python interpreter already.
 
