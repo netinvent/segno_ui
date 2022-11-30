@@ -1,4 +1,4 @@
-# Segno UI
+# Segno UI - An open source offline QR Code generator
 
 This program is a graphical user interface for the [segno library](https://github.com/heuer/segno) that allows to create QR codes.
 
