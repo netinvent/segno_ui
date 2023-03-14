@@ -380,7 +380,7 @@ def gui():
             except Exception as exc:
                 sg.PopupError(
                     "Could not import config file {}: {}".format(
-                        values["-IMPORT_FILENAME-"], exc
+                        values["-IMPORT_SETTINGS_FILENAME-"], exc
                     )
                 )
                 if _DEBUG:
