@@ -14,6 +14,7 @@ __build__ = "2023031401"
 __url__ = "https://github.com/netinvent/segno_ui"
 
 
+from typing import Tuple
 import sys
 
 try:
@@ -52,11 +53,7 @@ borders = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 CONFIG_FILENAME = "{}-settings.json".format(__intname__)
 
 
-def segno_helper_wrapper(content):
-    return content
-
-
-def get_conf_from_gui(values):
+def get_conf_from_gui(values: dict) -> Tuple[dict, dict, dict]:
     """
     Export PySimpleGUI output configuration to dicts
     """
@@ -91,7 +88,7 @@ def get_conf_from_gui(values):
     return (segno_make_opts, segno_export_opts, misc_options)
 
 
-def get_segno_arguments_from_gui(values):
+def get_segno_arguments_from_gui(values: dict) -> dict:
     """
     Transform PySimpleGUI values into dict
     """
@@ -112,7 +109,7 @@ def get_segno_arguments_from_gui(values):
     return data
 
 
-def fill_gui_from_segno_arguments(config, window):
+def fill_gui_from_segno_arguments(config: dict, window: sg.Window):
     try:
         if config["software"]["name"] != __intname__:
             raise EnvironmentError
@@ -147,7 +144,7 @@ def fill_gui_from_segno_arguments(config, window):
             window[pysimplegui_key].update(value)
 
 
-def generate_code(values, save_to=None):
+def generate_code(values: dict, save_to: str = None):
     """
     Create QRCodes
 
