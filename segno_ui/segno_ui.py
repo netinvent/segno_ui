@@ -18,7 +18,7 @@ from typing import Tuple
 import sys
 
 try:
-    import PySimpleGUI as sg
+    import FreeSimpleGUI as sg
 except ImportError as exc:
     print(
         "Module not found. If tkinter is missing, you need to install it from your distribution. See README.md file"
