@@ -9,8 +9,8 @@ __description__ = (
     "Basic UI for segno QR Code generator allowing to use segno fully offline"
 )
 __licence__ = "BSD 3 Clause"
-__version__ = "1.0.3"
-__build__ = "2023031401"
+__version__ = "1.0.4"
+__build__ = "2024122401"
 __url__ = "https://github.com/netinvent/segno_ui"
 
 
