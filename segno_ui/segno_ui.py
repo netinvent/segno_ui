@@ -16,6 +16,8 @@ __url__ = "https://github.com/netinvent/segno_ui"
 
 from typing import Tuple, Optional
 import sys
+import inspect
+import json
 
 try:
     import FreeSimpleGUI as sg
@@ -23,12 +25,10 @@ except ImportError as exc:
     print(
         "Module not found. If tkinter is missing, you need to install it from your distribution. See README.md file"
     )
-    print("Error: {}".format(exc))
+    print(f"Error: {"exc"}")
     sys.exit()
 import segno
 import segno.helpers
-import inspect
-import json
 
 
 _DEBUG = False
@@ -50,7 +50,7 @@ ecc_levels = {"7%": "L", "15%": "M", "25%": "Q", "33%": "H"}
 scales = [1, 2, 3, 4, 5, 6, 7, 8]
 borders = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
-CONFIG_FILENAME = "{}-settings.json".format(__intname__)
+CONFIG_FILENAME = f"{__intname__}-settings.json"
 
 
 def get_conf_from_gui(values: dict) -> Tuple[dict, dict, dict]:
@@ -94,13 +94,12 @@ def get_segno_arguments_from_gui(values: dict) -> dict:
     """
     # Get all arguments for the given qrcode helper function
     data = {}
-    for qrcode_type in QRCODE_TYPES.keys():
+    for qrcode_type, segno_function in QRCODE_TYPES.items():
 
-        segno_function = QRCODE_TYPES[qrcode_type]
         segno_arguments = inspect.getfullargspec(segno_function).args
         data[qrcode_type] = {}
         for segno_argument in segno_arguments:
-            value = values["-{}_{}-".format(qrcode_type, segno_argument)]
+            value = values[f"-{qrcode_type}_{segno_argument}-"]
             if value:
                 # special case for Geo QRCode which requires floats
                 if segno_argument in ["lat", "lng"]:
@@ -125,22 +124,22 @@ def fill_gui_from_segno_arguments(config: dict, window: sg.Window):
         # Transform error parameter from percentage into letter according to dict
         if key == "error":
             value = [i for i in ecc_levels if ecc_levels[i] == value][0]
-        pysimplegui_key = "-{}-".format(key.upper())
+        pysimplegui_key = f"-{key.upper()}-"
         window[pysimplegui_key].update(value)
 
     for key, value in config["segno_export_opts"].items():
-        pysimplegui_key = "-{}-".format(key.upper())
+        pysimplegui_key = f"-{key.upper()}-"
         window[pysimplegui_key].update(value)
 
     for key, value in config["misc_opts"].items():
-        pysimplegui_key = "-{}-".format(key.upper())
+        pysimplegui_key = f"-{key.upper()}-"
         if key == "active_tab":
             window[value].select()
         window[pysimplegui_key].update(value)
 
     for qrcode_type in QRCODE_TYPES.keys():
         for key, value in config["data"][qrcode_type].items():
-            pysimplegui_key = "-{}_{}-".format(qrcode_type, key)
+            pysimplegui_key = f"-{qrcode_type}_{key}-"
             window[pysimplegui_key].update(value)
 
 
@@ -173,7 +172,7 @@ def generate_code(values: dict, save_to: str = None) -> Optional[bytes]:
         return data
 
     # Add file extension to filename
-    save_to = "{}.{}".format(save_to, values["-EXPORT_FORMAT-"])
+    save_to = f"{save_to}.{values['-EXPORT_FORMAT-']}"
     qrcode.save(save_to, kind=values["-EXPORT_FORMAT-"], **segno_export_opts)
     return None
 
@@ -293,7 +292,7 @@ def gui():
                 [
                     sg.Text(text=segno_argument.capitalize(), size=(15, 1)),
                     sg.InputText(
-                        key="-{}_{}-".format(qrcode_type, segno_argument),
+                        key=f"-{qrcode_type}_{segno_argument}-",
                         enable_events=True,
                     ),
                 ]
@@ -312,7 +311,7 @@ def gui():
                         )
                     ]
                 ],
-                key="{}".format(qrcode_type),
+                key=f"{qrcode_type}",
             )
         )
 
@@ -330,7 +329,7 @@ def gui():
     ]
 
     window = sg.Window(
-        "Segno UI Offline QRCode Generator {}".format(__version__), full_tabbed_layout
+        f"Segno UI Offline QRCode Generator {__version__}", full_tabbed_layout
     )
 
     while True:
@@ -367,13 +366,13 @@ def gui():
                 ) = get_conf_from_gui(values)
                 with open(config_filename, "w", encoding="utf-8") as file_handle:
                     json.dump(config, file_handle)
-                sg.Popup("Configuration written to {}".format(config_filename))
+                sg.Popup(f"Configuration written to {config_filename}")
             except OSError as exc:
-                sg.PopupError("Cannot write file {}: {}".format(config_filename, exc))
+                sg.PopupError(f"Cannot write file {config_filename}: {exc}")
                 if _DEBUG:
                     raise
             except Exception as exc:
-                sg.PopupError("Could not export config: {}".format(exc))
+                sg.PopupError(f"Could not export config: {exc}")
                 if _DEBUG:
                     raise
         elif event == "-IMPORT_SETTINGS_FILENAME-":
@@ -388,9 +387,7 @@ def gui():
                     autogen(window, values)
             except Exception as exc:
                 sg.PopupError(
-                    "Could not import config file {}: {}".format(
-                        values["-IMPORT_SETTINGS_FILENAME-"], exc
-                    )
+                    f"Could not import config file {values['-IMPORT_SETTINGS_FILENAME-']}: {exc}"
                 )
                 if _DEBUG:
                     raise
@@ -414,7 +411,7 @@ def autogen(window, values, errors=False):
             if _DEBUG:
                 raise
         else:
-            print("Autogen: {}".format(exc))
+            print(f"Autogen: {exc}")
             window["-ERROR-TEXT-"].update(exc)
 
 
