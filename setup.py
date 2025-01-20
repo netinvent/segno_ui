@@ -1,12 +1,12 @@
 #! /usr/bin/env python
 #  -*- coding: utf-8 -*-
 #
-# This file is part of command_runner package
+# This file is part of segno_ui package
 
 
 __intname__ = "segno_ui.setup"
 __author__ = "Orsiris de Jong"
-__copyright__ = "Copyright (C) 2022 Orsiris de Jong"
+__copyright__ = "Copyright (C) 2022-2025 Orsiris de Jong"
 __licence__ = "BSD 3 Clause"
 __build__ = "2022113001"
 

@@ -4,13 +4,13 @@
 
 __intname__ = "segno_ui"
 __author__ = "Orsiris de Jong"
-__copyright__ = "Copyright (C) 2022-2023 Orsiris de Jong - NetInvent"
+__copyright__ = "Copyright (C) 2022-2025 Orsiris de Jong - NetInvent"
 __description__ = (
     "Basic UI for segno QR Code generator allowing to use segno fully offline"
 )
 __licence__ = "BSD 3 Clause"
 __version__ = "1.0.4"
-__build__ = "2024122401"
+__build__ = "2025012001"
 __url__ = "https://github.com/netinvent/segno_ui"
 
 
