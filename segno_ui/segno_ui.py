@@ -55,7 +55,7 @@ CONFIG_FILENAME = f"{__intname__}-settings.json"
 
 def get_conf_from_gui(values: dict) -> Tuple[dict, dict, dict]:
     """
-    Export PySimpleGUI output configuration to dicts
+    Export SimpleGUI output configuration to dicts
     """
     # Let's make sure we use L, M, Q, H instead of percentages
     error = ecc_levels[values["-ERROR-"]]
@@ -90,7 +90,7 @@ def get_conf_from_gui(values: dict) -> Tuple[dict, dict, dict]:
 
 def get_segno_arguments_from_gui(values: dict) -> dict:
     """
-    Transform PySimpleGUI values into dict
+    Transform SimpleGUI values into dict
     """
     # Get all arguments for the given qrcode helper function
     data = {}
@@ -124,23 +124,23 @@ def fill_gui_from_segno_arguments(config: dict, window: sg.Window):
         # Transform error parameter from percentage into letter according to dict
         if key == "error":
             value = [i for i in ecc_levels if ecc_levels[i] == value][0]
-        pysimplegui_key = f"-{key.upper()}-"
-        window[pysimplegui_key].update(value)
+        simplegui_key = f"-{key.upper()}-"
+        window[simplegui_key].update(value)
 
     for key, value in config["segno_export_opts"].items():
-        pysimplegui_key = f"-{key.upper()}-"
-        window[pysimplegui_key].update(value)
+        simplegui_key = f"-{key.upper()}-"
+        window[simplegui_key].update(value)
 
     for key, value in config["misc_opts"].items():
-        pysimplegui_key = f"-{key.upper()}-"
+        simplegui_key = f"-{key.upper()}-"
         if key == "active_tab":
             window[value].select()
-        window[pysimplegui_key].update(value)
+        window[simplegui_key].update(value)
 
     for qrcode_type in QRCODE_TYPES.keys():
         for key, value in config["data"][qrcode_type].items():
-            pysimplegui_key = f"-{qrcode_type}_{key}-"
-            window[pysimplegui_key].update(value)
+            simplegui_key = f"-{qrcode_type}_{key}-"
+            window[simplegui_key].update(value)
 
 
 def generate_code(values: dict, save_to: str = None) -> Optional[bytes]:
@@ -165,7 +165,7 @@ def generate_code(values: dict, save_to: str = None) -> Optional[bytes]:
 
     qrcode = qrcode_generate_fn(content, **segno_make_opts)
 
-    # Make PNG and print it in PySimpleGUI
+    # Make PNG and print it in SimpleGUI
     if not save_to:
         qrcode_data = qrcode.png_data_uri(**segno_export_opts)
         data = qrcode_data[len(PNG_URL_HEADER) :]
