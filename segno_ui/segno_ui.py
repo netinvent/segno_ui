@@ -14,7 +14,7 @@ __build__ = "2025012001"
 __url__ = "https://github.com/netinvent/segno_ui"
 
 
-from typing import Tuple
+from typing import Tuple, Optional
 import sys
 
 try:
@@ -144,7 +144,7 @@ def fill_gui_from_segno_arguments(config: dict, window: sg.Window):
             window[pysimplegui_key].update(value)
 
 
-def generate_code(values: dict, save_to: str = None):
+def generate_code(values: dict, save_to: str = None) -> Optional[bytes]:
     """
     Create QRCodes
 
@@ -175,7 +175,7 @@ def generate_code(values: dict, save_to: str = None):
     # Add file extension to filename
     save_to = "{}.{}".format(save_to, values["-EXPORT_FORMAT-"])
     qrcode.save(save_to, kind=values["-EXPORT_FORMAT-"], **segno_export_opts)
-
+    return None
 
 def gui():
     """
@@ -307,7 +307,7 @@ def gui():
                     [
                         sg.Column(
                             tab_layout,
-                            scrollable=True if qrcode_type == "vCard" else False,
+                            scrollable=(qrcode_type == "vCard"),
                             vertical_scroll_only=True,
                         )
                     ]
@@ -339,7 +339,7 @@ def gui():
             print(event)
         if event in (sg.WIN_CLOSED, "Exit"):
             break
-        elif event == "Generate":
+        if event == "Generate":
             autogen(window, values, errors=True)
         elif event == "-EXPORT_FILENAME-":
             try:
