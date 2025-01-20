@@ -25,7 +25,7 @@ except ImportError as exc:
     print(
         "Module not found. If tkinter is missing, you need to install it from your distribution. See README.md file"
     )
-    print(f"Error: {"exc"}")
+    print(f"Error: {exc}")
     sys.exit()
 import segno
 import segno.helpers
@@ -175,6 +175,7 @@ def generate_code(values: dict, save_to: str = None) -> Optional[bytes]:
     save_to = f"{save_to}.{values['-EXPORT_FORMAT-']}"
     qrcode.save(save_to, kind=values["-EXPORT_FORMAT-"], **segno_export_opts)
     return None
+
 
 def gui():
     """
