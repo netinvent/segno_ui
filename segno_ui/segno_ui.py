@@ -9,7 +9,7 @@ __description__ = (
     "Basic UI for segno QR Code generator allowing to use segno fully offline"
 )
 __licence__ = "BSD 3 Clause"
-__version__ = "1.0.4"
+__version__ = "1.0.5"
 __build__ = "2025012001"
 __url__ = "https://github.com/netinvent/segno_ui"
 
@@ -301,7 +301,19 @@ def gui():
 
         # Key QRCODE_TYPE will be set in -ACTIVE_TAB- key
         dynamic_layouts.append(
-            sg.Tab(qrcode_type, tab_layout, key="{}".format(qrcode_type))
+            sg.Tab(
+                qrcode_type,
+                [
+                    [
+                        sg.Column(
+                            tab_layout,
+                            scrollable=True if qrcode_type == "vCard" else False,
+                            vertical_scroll_only=True,
+                        )
+                    ]
+                ],
+                key="{}".format(qrcode_type),
+            )
         )
 
     full_tabbed_layout = [
