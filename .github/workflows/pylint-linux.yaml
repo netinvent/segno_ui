@@ -13,9 +13,9 @@ jobs:
         python-version: ["3.12"]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
@@ -33,11 +33,15 @@ jobs:
       run: |
         python -m pip install flake8
         # stop the build if there are Python syntax errors or undefined names
-        python -m flake8 --count --select=E9,F63,F7,F82 --show-source --statistics segno_ui
+        python -m flake8 --count --select=E9,F63,F7,F82 --show-source --statistics segno_ui tests contrib
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        python -m flake8 --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics segno_ui
+        python -m flake8 --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics segno_ui tests contrib
     - name: Lint with Black
       # Don't run on python < 3.6 since black does not exist there, run only once
       run: |
         pip install black
-        python -m black --check segno_ui
+        python -m black --check segno_ui tests contrib
+    - name: Test with pytest
+      run: |
+        python -m pip install pytest
+        python -m pytest tests -q

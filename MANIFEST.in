@@ -1,0 +1,9 @@
+include LICENSE
+include README.md
+# setup.py reads this at build time, so it has to be part of the sdist
+include segno_ui/requirements.txt
+# setuptools would otherwise pick up test_*.py but leave conftest.py behind
+recursive-include tests *.py
+# Screenshot the README points at, plus the icon the Windows build needs
+recursive-include pics *.png *.ico
+include contrib/make_icon.py

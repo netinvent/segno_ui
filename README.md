@@ -20,8 +20,10 @@ python3 -m pip install segno_ui
 
 Use with:
 ```
-segno_ui.py
+segno_ui
 ```
+
+`segno_ui --version` prints the version, `segno_ui --debug` logs GUI events and re-raises errors instead of only showing them.
 
 Depending on your system, you might need to install tkinter. Install with
 | System                                 | command                                  |
@@ -34,10 +36,34 @@ Depending on your system, you might need to install tkinter. Install with
 
 ## Graphical user interface
 
-Graphical user interface supports importing and exporting presets using json files.
-QRCode generation is made on changes.
+The code is regenerated on every change, and the status bar tells you what came
+out of it: symbol kind, version, module count and error correction level. A tab
+you have not typed anything into yet simply reports that there is nothing to
+encode, problems are only reported once there is something to report them about.
 
-![image](pics/screenshot_202211300101.png)
+Presets are imported and exported as json files from the **File** menu.
+
+The window adapts to what you are doing:
+
+- **EPC** payment codes are built by segno itself, which enforces the error correction level and version the EPC specification mandates. `Mode` and `Error correction` are therefore greyed out on that tab.
+- **Mini QR Codes** cannot carry the 33% error correction level, so that choice disappears from the list when you switch to that mode.
+- Each colour picker doubles as a swatch showing the colour currently in use, with a
+  pipette drawn on it in whichever shade stands out against that colour.
+- **Random** rolls a colour scheme that still scans. The light end stays close to
+  white, since a tinted background costs more readability than a saturated dark
+  colour buys back, and nothing is accepted below an 8:1 contrast ratio. How bright
+  the dark colour may go is worked out per hue rather than fixed: against white a
+  blue holds its contrast to about half lightness while a yellow is spent by a
+  fifth of it, so hues are also drawn in proportion to the headroom they have. Every
+  hue can still come up, blues and violets simply come up more often. These bounds
+  were settled by decoding rendered codes through simulated camera noise rather than
+  picked off a chart.
+- Fields segno would forward verbatim are offered as a list rather than free text: Wifi `Security` is a selector (`WPA`, `WEP`, `nopass`, `SAE`, `WPA2-EAP`, or empty to omit it) and `Hidden` is a checkbox.
+- The preview keeps a fixed size, so changing the scale or switching tabs never makes the window jump around. A code too big to fit is shrunk to fit rather than clipped, and the status bar says so. The export always uses the scale you picked.
+
+> **Settings files are written in clear text.** A preset holding a Wifi password or vCard details is as sensitive as the data itself, so store it accordingly. Segno UI warns you when it saves a preset containing a password.
+
+![image](pics/screenshot.png)
 
 
 ## Technical stuff
@@ -70,7 +96,7 @@ C:\MINGW\mingw64\bin\gcc.exe
 
 #### Install nuitka
 ```
-c:\python37-32\python.exe -m pip install nuitka ordered-set zstandard
+python.exe -m pip install nuitka ordered-set zstandard
 ```
 
 #### Compilation
@@ -79,7 +105,21 @@ Here are the compiling instructions so you can create your own segno distributio
 
 The following command should produce a target called `segno_ui.exe` which is portable for Windows 7 or newer.
 ```
-c:\python37-32\python.exe -m nuitka --onefile --plugin-enable=tk-inter "c:\segno_ui\segno_ui.py"
+python.exe -m nuitka --onefile --plugin-enable=tk-inter --windows-icon-from-ico=pics\segno_ui.ico "c:\segno_ui\segno_ui\segno_ui.py"
+```
+
+The application icon is a QR Code finder pattern. It lives twice in the tree: as
+a base64 payload in `segno_ui/segno_ui.py`, which is what the running window and
+its popups use, and as `pics/segno_ui.ico` for the Windows build above. Both are
+produced by `contrib/make_icon.py`, a maintenance script needing Pillow, which
+segno_ui itself does not depend on. Run it only when the icon has to change.
+
+## Tests
+
+The test suite is graphical-free, so it runs anywhere including on a CI runner without a display server:
+```
+python3 -m pip install pytest
+python3 -m pytest tests
 ```
 
 ## Why
